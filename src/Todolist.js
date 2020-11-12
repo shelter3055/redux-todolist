@@ -16,6 +16,10 @@ class Todolist extends Component {
         super(props)
         console.log(store.getState())
         this.state=store.getState()
+        this.changeInputValue=this.changeInputValue.bind(this) //this指向
+        this.storechange=this.storechange.bind(this)
+        this.clickBtn=this.clickBtn.bind(this)
+        store.subscribe(this.storechange)
     }
 
     render() {
@@ -23,8 +27,12 @@ class Todolist extends Component {
             <div style={{ margin:'10px'}}>
                 <div>
                     <Input placeholder={this.state.inputValue} 
-                    style={{ width:'250px',marginRight:'10px'}}/>
-                    <Button type="primary"> 添加</Button>
+                    style={{ width:'250px',marginRight:'10px'}}
+                    onChange={this.changeInputValue}
+                    />
+                    <Button type="primary"
+                    onClick={this.clickBtn}
+                    > 添加</Button>
                 </div>
                 <div style={{margin:'10px',width:'300px'}}>
                     <List
@@ -36,6 +44,25 @@ class Todolist extends Component {
                 </div>
             </div>
         )
+    }
+
+    changeInputValue(e){
+        // console.log(e.target.value);
+        const action={
+            type:'changeInput',
+            value:e.target.value
+        }
+        store.dispatch(action)
+    }
+    storechange(){
+        this.setState(store.getState())
+    }
+    clickBtn(){
+        // console.log(11111);
+        const action ={
+            type:'additem',
+        }
+        store.dispatch(action)
     }
 }
 
